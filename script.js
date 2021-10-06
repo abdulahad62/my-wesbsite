@@ -29,7 +29,49 @@ const fillDataList = ()=>{
         countryList.forEach((cntry)=>{
             $('datalist').append(`<option value="${cntry}">`)
         })
-    })
+    })const overlay = document.querySelector(".overlay");
+const modal = document.querySelector(".modal");
+const toggles = document.querySelectorAll(".toggle");
+
+let isModalOpen = false;
+
+const modalTL = new gsap.timeline({
+  paused: true
+});
+
+modalTL
+  .from(overlay, {
+    opacity: 0
+  })
+  .from(
+    modal,
+    {
+      y: 50,
+      opacity: 0,
+      ease: "back.out(2)"
+    },
+    "<"
+  );
+
+const handleModal = (modalStatus) => {
+  if (modalStatus) {
+    modalTL.reverse();
+    setTimeout(() => {
+      overlay.classList.remove("overlay--active");
+    }, modalTL.duration() * 1000);
+  } else {
+    modalTL.play();
+    overlay.classList.add("overlay--active");
+  }
+};
+
+toggles.forEach((toggle) => {
+  toggle.addEventListener("click", () => {
+    handleModal(isModalOpen);
+    isModalOpen = !isModalOpen;
+  });
+});
+
 }
 
 const addCountry = (j)=>{
